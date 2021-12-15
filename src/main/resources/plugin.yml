@@ -1,0 +1,6 @@
+name: Spotbilledduck
+version: '${version}'
+main: net.kunmc.lab.spotbilledduck.Spotbilledduck
+api-version: 1.16
+authors: [ POne0301 ]
+description: カルガモプラグイン
