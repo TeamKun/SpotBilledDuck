@@ -42,6 +42,6 @@ public class MinecraftStringDecorator {
     }
 
     public static String DecorateString(String str, String color) {
-         return formattingCodes.get(color) + str;
+         return formattingCodes.get(color) + str + formattingCodes.get("RESET");
     }
 }

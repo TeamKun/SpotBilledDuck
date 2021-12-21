@@ -6,7 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SpotBilledDuck extends JavaPlugin {
 
-    public static SpotBilledDuck plugin;
+    private static SpotBilledDuck plugin;
+
+    public static JavaPlugin getPlugin(){
+        return plugin;
+    }
 
     @Override
     public void onEnable() {

@@ -28,6 +28,10 @@ public class GameModeManager {
         return new CommandResult(true, "停止しました");
     }
 
+    public static boolean isSoloMode() {
+        return currentMode.equals(GameMode.SOLO);
+    }
+
     private static void toggleState() {
         isRunning = !isRunning;
     }
