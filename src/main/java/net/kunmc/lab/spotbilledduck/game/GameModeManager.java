@@ -17,6 +17,7 @@ public class GameModeManager {
             return new CommandResult(false, "既に開始されています");
         }
         toggleState();
+        ParticleManager.showParticle();
         return new CommandResult(true, "開始しました");
     }
 
@@ -25,6 +26,7 @@ public class GameModeManager {
             return new CommandResult(false, "開始されていません");
         }
         toggleState();
+        ParticleManager.stopParticle();
         return new CommandResult(true, "停止しました");
     }
 

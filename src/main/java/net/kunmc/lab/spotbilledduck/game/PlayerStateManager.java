@@ -1,9 +1,12 @@
 package net.kunmc.lab.spotbilledduck.game;
 
+import javafx.scene.Parent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+
+import static net.kunmc.lab.spotbilledduck.game.Place.getXyzPlaceStringFromLocation;
 
 public class PlayerStateManager {
     // 親プレイヤー
@@ -16,7 +19,6 @@ public class PlayerStateManager {
     // 子プレイヤーの移動カウント数
     private static Map<UUID, Integer> childPlayerMoveCount = new HashMap<>();
 
-    private static StringBuilder sb = new StringBuilder();
 
     public static void addParentPlayer(UUID id) {
         if (!isParentPlayer(id)) {
@@ -35,62 +37,41 @@ public class PlayerStateManager {
     public static void addParentPlayerReachedPlace(UUID id, Location location) {
         for (ParentPlayer parentPlayer: parentPlayers) {
             if (parentPlayer.getId().equals(id)) {
-                parentPlayer.getReachedPlace().add(getXzPlaceStringFromLocation(location));
+                parentPlayer.getReachedPlace().add(getXyzPlaceStringFromLocation(location));
                 break;
             }
         }
     }
 
-    public static void addChildPlayerPrePlace(UUID id, Location location) {
-        childPlayerPrePlace.put(id, getXyzPlaceStringFromLocation(location));
-    }
-
-    private static String getXyzPlaceStringFromLocation(Location location) {
-        sb.append(location.getWorld().getName());
-        sb.append(" ");
-        sb.append(location.getX());
-        sb.append(" ");
-        sb.append(location.getY());
-        sb.append(" ");
-        sb.append(location.getZ());
-        String ret = sb.toString();
-        sb.setLength(0);
-        return ret;
-    }
-
-    private static String getXzPlaceStringFromLocation(Location location) {
-        sb.append(location.getWorld().getName());
-        sb.append(" ");
-        sb.append(location.getX());
-        sb.append(" ");
-        sb.append(location.getZ());
-        String ret = sb.toString();
-        sb.setLength(0);
-        return ret;
-    }
-
-    public static void updatePlayerState(Player player, Location location) {
+   public static void updatePlayerState(Player player, Location location) {
         UUID id = player.getUniqueId();
         if (isParentPlayer(id)) {
             addParentPlayerReachedPlace(id, location);
-        } else {
-            addChildPlayerPrePlace(id, location);
         }
     }
 
-    public static boolean isParentPlayer(UUID id) {
-        return parentPlayersSearch.contains(id);
-    }
+   public static boolean isSafePlace(Player player, String place) {
+       for (ParentPlayer parentPlayer: getParentPlayers(player)) {
+           if (parentPlayer.getReachedPlace().contains(place)) {
+               return true;
+           }
+       }
+       return false;
+   }
 
-    public static Set getParentPlayers(Player player) {
-        // 対象
-        Set<UUID> parentPlayers = new HashSet<>();
+   public static boolean isParentPlayer(UUID id) {
+       return parentPlayersSearch.contains(id);
+   }
 
-        // ソロモードなら設定されているすべての親、チームモードならプレイヤーのチームの親を返すようにする
-        //if (!GameModeManager.isSoloMode()) {
-        //    TeamManager.getTeamPlayers(player);
-        //}
+   public static Set<ParentPlayer> getParentPlayers(Player player) {
+       // 対象
+       Set<ParentPlayer> parentPlayers = new HashSet<>();
 
-        return parentPlayers;
-    }
+       // ソロモードなら設定されているすべての親、チームモードならプレイヤーのチームの親を返すようにする
+       //if (!GameModeManager.isSoloMode()) {
+       //    TeamManager.getTeamPlayers(player);
+       //}
+
+       return parentPlayers;
+   }
 }
