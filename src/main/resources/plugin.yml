@@ -1,6 +1,7 @@
 name: Spotbilledduck
 version: '${version}'
-main: net.kunmc.lab.spotbilledduck.Spotbilledduck
+main: net.kunmc.lab.spotbilledduck.SpotBilledDuck
 api-version: 1.16
+depend: [ ProtocolLib ]
 authors: [ POne0301 ]
 description: カルガモプラグイン

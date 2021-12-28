@@ -6,7 +6,7 @@ import net.kunmc.lab.spotbilledduck.game.GameModeManager;
 
 class Start extends BaseController {
 
-    private final CommandEnum commandEnum = CommandEnum.START;
+    private final CommandEnum commandEnum = CommandEnum.start;
 
     @Override
     public void execute(CommandContext ctx) {

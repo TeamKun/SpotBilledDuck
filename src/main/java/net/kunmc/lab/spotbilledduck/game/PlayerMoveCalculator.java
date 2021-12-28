@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class PlayerMoveCalculator {
     private static BukkitTask adjustPositionTask;
@@ -32,14 +33,14 @@ public class PlayerMoveCalculator {
         if (PlayerStateManager.isParentPlayer(player.getUniqueId())) return;
 
         // playerの親を取得する
-        Set<ParentPlayer> parentPlayers = PlayerStateManager.getParentPlayers(player);
+        Set<UUID> parentPlayersId = PlayerStateManager.getParentPlayersId(player);
 
         String playerPlace = Place.getXyzPlaceStringFromLocation(player.getLocation());
 
         // playerの親の座標一覧を取得する
         boolean moveFlag = true;
-        for (ParentPlayer parentPlayer: parentPlayers) {
-            if (parentPlayer.getReachedPlace().contains(playerPlace)) {
+        for (UUID parentPlayerId: parentPlayersId) {
+            if (PlayerStateManager.isSafePlace(player, playerPlace)) {
                 moveFlag = false;
             }
         }
@@ -47,10 +48,10 @@ public class PlayerMoveCalculator {
         if (!moveFlag) return;
 
         // 移動させる
-        adjustPlayerPlace(player);
+        forceMovePlayerPlace(player);
     }
 
-    private static void adjustPlayerPlace (Player player) {
+    private static void forceMovePlayerPlace(Player player) {
         // Blockの中心点とPlayerの位置情報を計算して近い位置地にTPする
         Block neighborhoodBlock = getNeighborhoodBlock(player);
         player.teleport(neighborhoodBlock.getLocation());
@@ -67,10 +68,10 @@ public class PlayerMoveCalculator {
         double pz = player.getLocation().getZ();
 
         Set<String> mergedParentPlaces = new HashSet<>();
-        Set<ParentPlayer> parentPlayers = PlayerStateManager.getParentPlayers(player);
+        Set<UUID> parentPlayersId = PlayerStateManager.getParentPlayersId(player);
 
-        for (ParentPlayer parentPlayer: parentPlayers) {
-            mergedParentPlaces.addAll(parentPlayer.getReachedPlace());
+        for (UUID parentPlayerId: parentPlayersId) {
+            mergedParentPlaces.addAll(PlayerStateManager.getParentPlayerPlace(Bukkit.getPlayer(parentPlayerId)));
         }
 
         double minDistance = Double.MAX_VALUE;

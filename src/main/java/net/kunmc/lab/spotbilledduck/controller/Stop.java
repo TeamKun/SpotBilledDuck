@@ -6,7 +6,7 @@ import net.kunmc.lab.spotbilledduck.game.GameModeManager;
 
 class Stop extends BaseController {
 
-    private final CommandEnum commandEnum = CommandEnum.STOP;
+    private final CommandEnum commandEnum = CommandEnum.stop;
 
     @Override
     public void execute(CommandContext ctx) {

@@ -1,12 +1,15 @@
 package net.kunmc.lab.spotbilledduck.command;
 
 public enum CommandEnum {
-    SPOTBILLEDDUCK(),
-    MODE(),
-    START(),
-    STOP();
+    spotBilledDuck(),
+    mode(),
+    start(),
+    stop(),
+    showStatus(),
+    addParent(),
+    removeParent();
 
     public String commandName() {
-        return this.name().toLowerCase();
+        return this.name();
     }
 }
