@@ -52,7 +52,7 @@ public class ParticleManager {
         }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 1);
     }
 
-    public static void stopParticle (){
+    public static void stopParticle() {
         showParticleTack.cancel();
         showParticleTack = null;
     }

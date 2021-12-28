@@ -28,9 +28,9 @@ public class MinecraftStringDecorator {
     public final static String ITALIC = "§o";
     public final static String RESET = "§r";
 
-    private static Map<String, String> formattingCodes= new HashMap<>();
+    private static Map<String, String> formattingCodes = new HashMap<>();
 
-     static {
+    static {
         for (Field field : MinecraftStringDecorator.class.getDeclaredFields()) {
             try {
                 field.setAccessible(true);
@@ -42,6 +42,6 @@ public class MinecraftStringDecorator {
     }
 
     public static String DecorateString(String str, String color) {
-         return formattingCodes.get(color) + str + formattingCodes.get("RESET");
+        return formattingCodes.get(color) + str + formattingCodes.get("RESET");
     }
 }

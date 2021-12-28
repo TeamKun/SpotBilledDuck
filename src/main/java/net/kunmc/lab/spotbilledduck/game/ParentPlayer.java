@@ -12,8 +12,8 @@ public class ParentPlayer {
     @Getter
     private Set<String> reachedPlace;
 
-    ParentPlayer(UUID id){
-        this.id  = id;
+    ParentPlayer(UUID id) {
+        this.id = id;
         reachedPlace = new HashSet<>();
     }
 }

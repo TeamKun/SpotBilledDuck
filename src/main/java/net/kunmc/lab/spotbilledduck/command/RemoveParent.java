@@ -2,7 +2,6 @@ package net.kunmc.lab.spotbilledduck.command;
 
 import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.controller.CommandStrategy;
-import org.bukkit.command.Command;
 import org.jetbrains.annotations.NotNull;
 
 public class RemoveParent extends CommandBase {

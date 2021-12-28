@@ -4,7 +4,7 @@ import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.controller.CommandStrategy;
 import org.jetbrains.annotations.NotNull;
 
-public class AddParent extends CommandBase{
+public class AddParent extends CommandBase {
     public AddParent(CommandEnum commandEnum) {
         super(commandEnum);
     }

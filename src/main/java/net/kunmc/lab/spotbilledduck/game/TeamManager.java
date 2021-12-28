@@ -1,6 +1,5 @@
 package net.kunmc.lab.spotbilledduck.game;
 
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -17,10 +16,10 @@ public class TeamManager {
     private static Scoreboard board = scoreboardManager.getMainScoreboard();
     private static List<Team> teams = new ArrayList<>();
 
-    public static Set<String> getTeamPlayers(Player player){
+    public static Set<String> getTeamPlayers(Player player) {
         Set<String> teamPlayers = null;
         // 存在するチームは本プラグインに関係するものという前提
-        for (Team team: player.getScoreboard().getTeams()) {
+        for (Team team : player.getScoreboard().getTeams()) {
             teamPlayers = team.getEntries();
         }
         return teamPlayers;

@@ -4,7 +4,7 @@ import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.controller.CommandStrategy;
 import org.jetbrains.annotations.NotNull;
 
-public class ShowStatus extends CommandBase{
+public class ShowStatus extends CommandBase {
     public ShowStatus(CommandEnum commandEnum) {
         super(commandEnum);
     }
