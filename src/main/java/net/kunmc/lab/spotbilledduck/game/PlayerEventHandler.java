@@ -10,6 +10,8 @@ public class PlayerEventHandler implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
+        if (!GameModeManager.isRunning() || !PlayerStateManager.isParentPlayer(player.getUniqueId())) return;
+
         Location blockLocation = player.getLocation().getBlock().getLocation();
         PlayerStateManager.updatePlayerState(player, blockLocation);
     }

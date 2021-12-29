@@ -1,10 +1,12 @@
 package net.kunmc.lab.spotbilledduck.game;
 
+import net.kunmc.lab.spotbilledduck.controller.CommandResult;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.kunmc.lab.spotbilledduck.game.Place.getXyzPlaceStringFromLocation;
 
@@ -12,16 +14,20 @@ public class PlayerStateManager {
     // <親プレイヤーのID, 歩いた地点>
     private static Map<UUID, Set<String>> parentPlayers = new HashMap<>();
 
-    public static void addParentPlayer(UUID id) {
+    public static CommandResult addParentPlayer(UUID id) {
         if (!isParentPlayer(id)) {
             parentPlayers.put(id, new HashSet<>());
+            return new CommandResult(true, Bukkit.getPlayer(id).getName() + "を親に追加しました");
         }
+        return new CommandResult(false, Bukkit.getPlayer(id).getName() + "はすでに追加されています");
     }
 
-    public static void removeParentPlayer(UUID id) {
+    public static CommandResult removeParentPlayer(UUID id) {
         if (isParentPlayer(id)) {
             parentPlayers.remove(id);
+            return new CommandResult(true, Bukkit.getPlayer(id).getName() + "を親から削除しました");
         }
+        return new CommandResult(false, Bukkit.getPlayer(id).getName() + "は親に存在しません");
     }
 
     public static void addParentPlayerReachedPlace(UUID id, Location location) {
@@ -37,13 +43,17 @@ public class PlayerStateManager {
         }
     }
 
-    public static boolean isSafePlace(Player player, String place) {
+    public static boolean isParentReachedPlace(Player player, String place) {
         for (UUID id : getParentPlayersId(player)) {
             if (parentPlayers.get(id).contains(place)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public static List<Player> getChildPlayers(){
+        return Bukkit.getOnlinePlayers().stream().filter(e -> !isParentPlayer(e.getUniqueId())).collect(Collectors.toList());
     }
 
     public static boolean isParentPlayer(UUID id) {
@@ -55,7 +65,9 @@ public class PlayerStateManager {
         Set<UUID> parentPlayers = new HashSet<>();
 
         // ソロモードなら設定されているすべての親、チームモードならプレイヤーのチームの親を返すようにする
-        if (!GameModeManager.isSoloMode()) {
+        if (GameModeManager.isSoloMode()) {
+            parentPlayers.addAll(PlayerStateManager.parentPlayers.keySet());
+        } else {
             // プレイヤーの所属するチームメンバーを取得
             for (String targetPlayer : TeamManager.getTeamPlayers(player)) {
                 // 親がいるかチェック

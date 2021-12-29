@@ -1,12 +1,9 @@
 package net.kunmc.lab.spotbilledduck.game;
 
 import lombok.Getter;
-import lombok.Setter;
 import net.kunmc.lab.spotbilledduck.controller.CommandResult;
 
 public class GameModeManager {
-    @Getter
-    @Setter
     private static GameMode currentMode = GameMode.SOLO;
 
     @Getter
@@ -18,6 +15,7 @@ public class GameModeManager {
         }
         toggleState();
         ParticleManager.showParticle();
+        PlayerMoveCalculator.startAdjustPosition();
         return new CommandResult(true, "開始しました");
     }
 
@@ -27,7 +25,19 @@ public class GameModeManager {
         }
         toggleState();
         ParticleManager.stopParticle();
+        PlayerMoveCalculator.stopAdjustPosition();
         return new CommandResult(true, "停止しました");
+    }
+
+    public static CommandResult setCurrentMode(GameMode mode) {
+        boolean isSucceed = currentMode != mode;
+
+        if (!isSucceed) {
+            return new CommandResult(false, "すでに" + mode.name().toLowerCase() + "モードです");
+        }
+
+        currentMode = mode;
+        return new CommandResult(true, mode.name().toLowerCase() + "モードに切り替えました");
     }
 
     public static boolean isSoloMode() {

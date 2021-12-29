@@ -8,10 +8,9 @@ public class Main extends CommandBase {
                 new Mode(CommandEnum.mode),
                 new Start(CommandEnum.start),
                 new Stop(CommandEnum.stop),
-                new Stop(CommandEnum.stop),
-                new Stop(CommandEnum.showStatus),
-                new Stop(CommandEnum.addParent),
-                new Stop(CommandEnum.removeParent)
+                new ShowStatus(CommandEnum.showStatus),
+                new AddParent(CommandEnum.addParent),
+                new RemoveParent(CommandEnum.removeParent)
         );
     }
 }

@@ -16,6 +16,9 @@ public class CommandStrategy {
         this.controllers.add(new Start());
         this.controllers.add(new Stop());
         this.controllers.add(new Mode());
+        this.controllers.add(new AddParent());
+        this.controllers.add(new RemoveParent());
+        this.controllers.add(new ShowStatus());
     }
 
     public void execute(CommandEnum commandEnum, CommandContext ctx) {

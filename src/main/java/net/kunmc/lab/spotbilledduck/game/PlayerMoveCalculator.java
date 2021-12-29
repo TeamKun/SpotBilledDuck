@@ -4,6 +4,7 @@ import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class PlayerMoveCalculator {
     private static BukkitTask adjustPositionTask;
 
-    public static void adjustPosition() {
+    public static void startAdjustPosition() {
         /**
          * 腐食処理等のループメソッド
          */
@@ -23,34 +24,44 @@ public class PlayerMoveCalculator {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
+                    if (!shouldCheckPlayerMove(player)) return;
                     adjustPlayer(player);
                 });
             }
         }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 1);
     }
 
+    public static boolean shouldCheckPlayerMove(Player player) {
+        // Playerの移動判定やポジションを保持する判定
+        return !((LivingEntity)player).isOnGround() && !player.isInWaterOrBubbleColumn();
+    }
+
+    public static void stopAdjustPosition() {
+        adjustPositionTask.cancel();
+        adjustPositionTask = null;
+    }
+
     private static void adjustPlayer(Player player) {
         if (PlayerStateManager.isParentPlayer(player.getUniqueId())) return;
 
-        String playerPlace = Place.getXyzPlaceStringFromLocation(player.getLocation());
-
-        // playerの親の座標一覧を取得する
-        boolean moveFlag = true;
-        if (PlayerStateManager.isSafePlace(player, playerPlace)) {
-            moveFlag = false;
+        String playerPlace = Place.getXyzPlaceStringFromLocation(player.getLocation().getBlock().getLocation());
+        if (!PlayerStateManager.isParentReachedPlace(player, playerPlace)) {
+            forceMovePlayerPlace(player);
         }
-        // 移動させる必要がなければ終わり
-        if (!moveFlag) return;
-
-        // 移動させる
-        forceMovePlayerPlace(player);
     }
 
     private static void forceMovePlayerPlace(Player player) {
+        // TODO: 空中にTPされる可能性がある点を考慮する
         // Blockの中心点とPlayerの位置情報を計算して近い位置地にTPする
         Block neighborhoodBlock = getNeighborhoodBlock(player);
-        player.teleport(neighborhoodBlock.getLocation());
-        player.teleport(neighborhoodBlock.getLocation());
+        // ゲーム開始時などブロックが存在しない場合は何もしない
+        if (neighborhoodBlock == null) return;
+        // テレポート時のPlayerの向きや立ち位置をブロックの中心にする調整
+        Location teleportLocation = neighborhoodBlock.getLocation();
+        teleportLocation.setPitch(player.getLocation().getPitch());
+        teleportLocation.setYaw(player.getLocation().getYaw());
+        teleportLocation.add(0.5,0,0.5);
+        player.teleport(teleportLocation);
     }
 
     public static String getBlockPlaceFromLocation(Location location) {

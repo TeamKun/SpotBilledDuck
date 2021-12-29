@@ -2,15 +2,15 @@ package net.kunmc.lab.spotbilledduck.controller;
 
 import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.command.CommandEnum;
-import net.kunmc.lab.spotbilledduck.game.GameModeManager;
+import net.kunmc.lab.spotbilledduck.game.PlayerStateManager;
 
-class AddPlayer extends BaseController {
+class AddParent extends BaseController {
 
     private final CommandEnum commandEnum = CommandEnum.addParent;
 
     @Override
     public void execute(CommandContext ctx) {
-        CommandResult result = GameModeManager.stop();
+        CommandResult result = PlayerStateManager.addParentPlayer(ctx.getPlayer().getUniqueId());
         result.sendResult(ctx);
     }
 
