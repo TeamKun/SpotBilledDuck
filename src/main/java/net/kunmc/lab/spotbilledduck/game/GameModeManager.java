@@ -14,8 +14,9 @@ public class GameModeManager {
             return new CommandResult(false, "既に開始されています");
         }
         toggleState();
-        ParticleManager.showParticle();
+        ParticleManager.startShowParticle();
         PlayerMoveCalculator.startAdjustPosition();
+        PlayerStateManager.startRemoveParentPlayerReachedPlace();
         return new CommandResult(true, "開始しました");
     }
 
@@ -24,8 +25,9 @@ public class GameModeManager {
             return new CommandResult(false, "開始されていません");
         }
         toggleState();
-        ParticleManager.stopParticle();
+        ParticleManager.stopShowParticle();
         PlayerMoveCalculator.stopAdjustPosition();
+        PlayerStateManager.stopRemoveParentPlayerReachedPlace();
         return new CommandResult(true, "停止しました");
     }
 

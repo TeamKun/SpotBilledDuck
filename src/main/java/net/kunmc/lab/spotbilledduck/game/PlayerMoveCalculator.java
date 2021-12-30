@@ -17,12 +17,10 @@ public class PlayerMoveCalculator {
     private static BukkitTask adjustPositionTask;
 
     public static void startAdjustPosition() {
-        /**
-         * 腐食処理等のループメソッド
-         */
         adjustPositionTask = new BukkitRunnable() {
             @Override
             public void run() {
+                if (!GameModeManager.isRunning()) return;
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     if (!shouldCheckPlayerMove(player)) return;
                     adjustPlayer(player);
@@ -33,7 +31,7 @@ public class PlayerMoveCalculator {
 
     public static boolean shouldCheckPlayerMove(Player player) {
         // Playerの移動判定やポジションを保持する判定
-        return !((LivingEntity)player).isOnGround() && !player.isInWaterOrBubbleColumn();
+        return ((LivingEntity)player).isOnGround() || player.isInWaterOrBubbleColumn();
     }
 
     public static void stopAdjustPosition() {
@@ -62,11 +60,6 @@ public class PlayerMoveCalculator {
         teleportLocation.setYaw(player.getLocation().getYaw());
         teleportLocation.add(0.5,0,0.5);
         player.teleport(teleportLocation);
-    }
-
-    public static String getBlockPlaceFromLocation(Location location) {
-        // 計算に利用するブロックの位置情報を取得する
-        return Place.getXyzPlaceStringFromLocation(location);
     }
 
     private static Block getNeighborhoodBlock(Player player) {
