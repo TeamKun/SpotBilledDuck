@@ -1,5 +1,6 @@
 package net.kunmc.lab.spotbilledduck.game;
 
+import lombok.Getter;
 import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import net.kunmc.lab.spotbilledduck.controller.CommandResult;
 import org.bukkit.Bukkit;
@@ -17,25 +18,26 @@ import static net.kunmc.lab.spotbilledduck.game.Place.getXyzPlaceStringFromLocat
 
 public class PlayerStateManager {
     // <親プレイヤーのID, 歩いた地点>
+    @Getter
     private static Map<UUID, Set<String>> parentPlayers = new HashMap<>();
-    private static BukkitTask  removeParentPlayerReachedPlaceTask;
+    private static BukkitTask removeParentPlayerReachedPlaceTask;
 
     public static void startRemoveParentPlayerReachedPlace() {
         removeParentPlayerReachedPlaceTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!GameModeManager.isRunning()) return;
-                // あるブロックの足元が特定ブロック（isTargetBlock, Airなど）なら位置情報を削除()
                 parentPlayers.keySet().forEach(playerId -> {
                     Set<String> removeTarget = new HashSet<>();
                     for (String place : parentPlayers.get(playerId)) {
                         Block block = Place.getBlockFromPlaceString(place);
-                        Block targetBlock = block.getLocation().add(0,-1,0).getBlock();
-                        if (!isTargetBlock(targetBlock)) {
+                        Block targetBlock = block.getLocation().add(0, -1, 0).getBlock();
+                        // 真下が踏めなくなった足場は削除
+                        if (!canStand(targetBlock)) {
                             removeTarget.add(place);
                         }
                     }
-                    for (String place: removeTarget) {
+                    for (String place : removeTarget) {
                         removeParentPlayerReachedPlace(playerId, place);
                     }
                 });
@@ -47,7 +49,6 @@ public class PlayerStateManager {
         removeParentPlayerReachedPlaceTask.cancel();
         removeParentPlayerReachedPlaceTask = null;
     }
-
 
     public static CommandResult addParentPlayer(UUID id) {
         if (!isParentPlayer(id)) {
@@ -67,7 +68,6 @@ public class PlayerStateManager {
 
     public static void addParentPlayerReachedPlace(UUID id, Location location) {
         // 本メソッド実行時にはidを含んでいる想定だが一応チェックを入れておく
-        System.out.println(location.getBlock().getType());
         if (parentPlayers.containsKey(id))
             parentPlayers.get(id).add(getXyzPlaceStringFromLocation(location));
     }
@@ -84,7 +84,6 @@ public class PlayerStateManager {
             parentPlayers.get(id).remove(place);
     }
 
-
     public static void updatePlayerState(Player player, Location location) {
         UUID id = player.getUniqueId();
         if (isParentPlayer(id)) {
@@ -92,7 +91,7 @@ public class PlayerStateManager {
         }
     }
 
-    public static boolean isTargetBlock(Block block) {
+    public static boolean canStand(Block block) {
         // 対象のブロックが強制移動の対象になるかを判定
         Material type = block.getType();
         return !type.equals(Material.AIR) &&
@@ -111,7 +110,7 @@ public class PlayerStateManager {
         return false;
     }
 
-    public static List<Player> getChildPlayers(){
+    public static List<Player> getChildPlayers() {
         return Bukkit.getOnlinePlayers().stream().filter(e -> !isParentPlayer(e.getUniqueId())).collect(Collectors.toList());
     }
 

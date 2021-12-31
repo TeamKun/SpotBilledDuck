@@ -22,16 +22,22 @@ public class PlayerMoveCalculator {
             public void run() {
                 if (!GameModeManager.isRunning()) return;
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    if (!shouldCheckPlayerMove(player)) return;
+                    if (!shouldMovePlayer(player)) return;
                     adjustPlayer(player);
                 });
             }
         }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 1);
     }
 
-    public static boolean shouldCheckPlayerMove(Player player) {
+    public static boolean shouldMovePlayer(Player player) {
         // Playerの移動判定やポジションを保持する判定
-        return ((LivingEntity)player).isOnGround() || player.isInWaterOrBubbleColumn();
+
+        // 水中や空中にいる間は判定しない
+        if (!((LivingEntity) player).isOnGround() && !player.isInWaterOrBubbleColumn()) return false;
+
+        // 足元のブロックが着地できないところなら移動しない
+        Block underBlock = player.getLocation().add(0, -1, 0).getBlock();
+        return PlayerStateManager.canStand(underBlock);
     }
 
     public static void stopAdjustPosition() {
@@ -49,16 +55,15 @@ public class PlayerMoveCalculator {
     }
 
     private static void forceMovePlayerPlace(Player player) {
-        // TODO: 空中にTPされる可能性がある点を考慮する
         // Blockの中心点とPlayerの位置情報を計算して近い位置地にTPする
         Block neighborhoodBlock = getNeighborhoodBlock(player);
         // ゲーム開始時などブロックが存在しない場合は何もしない
         if (neighborhoodBlock == null) return;
-        // テレポート時のPlayerの向きや立ち位置をブロックの中心にする調整
+        // テレポート時のPlayerの向きや立ち位置を調整
         Location teleportLocation = neighborhoodBlock.getLocation();
         teleportLocation.setPitch(player.getLocation().getPitch());
         teleportLocation.setYaw(player.getLocation().getYaw());
-        teleportLocation.add(0.5,0,0.5);
+        teleportLocation.add(0.5, 0, 0.5);
         player.teleport(teleportLocation);
     }
 

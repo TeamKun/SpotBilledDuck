@@ -8,9 +8,10 @@ public class AddParent extends CommandBase {
     public AddParent(CommandEnum commandEnum) {
         super(commandEnum);
         usage(usageBuilder -> {
-            usageBuilder.entityArgument("player",false, false);
+            usageBuilder.entityArgument("player", true, false);
         });
     }
+
     @Override
     public void execute(@NotNull CommandContext ctx) {
         CommandStrategy.INSTANCE.execute(this.commandEnum, ctx);

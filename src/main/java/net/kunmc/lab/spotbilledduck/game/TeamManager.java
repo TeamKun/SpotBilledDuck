@@ -18,7 +18,7 @@ public class TeamManager {
 
     public static Set<String> getTeamPlayers(Player player) {
         Set<String> teamPlayers = null;
-        // 存在するチームは本プラグインに関係するものという前提
+        // 存在するチームは本プラグインに関係するものという前提、それ以外のチームは考慮しない
         for (Team team : player.getScoreboard().getTeams()) {
             teamPlayers = team.getEntries();
         }
