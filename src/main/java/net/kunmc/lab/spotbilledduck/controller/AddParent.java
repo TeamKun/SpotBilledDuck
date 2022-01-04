@@ -3,6 +3,10 @@ package net.kunmc.lab.spotbilledduck.controller;
 import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.command.CommandEnum;
 import net.kunmc.lab.spotbilledduck.game.PlayerStateManager;
+import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.Locale;
 
 class AddParent extends BaseController {
 
@@ -10,8 +14,16 @@ class AddParent extends BaseController {
 
     @Override
     public void execute(CommandContext ctx) {
-        CommandResult result = PlayerStateManager.addParentPlayer(ctx.getPlayer().getUniqueId());
-        result.sendResult(ctx);
+        try {
+            for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
+                if (arg instanceof Player) {
+                    CommandResult result = PlayerStateManager.addParentPlayer(((Player) arg).getUniqueId());
+                    result.sendResult(ctx);
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            ctx.fail("引数が不正です");
+        }
     }
 
     @Override

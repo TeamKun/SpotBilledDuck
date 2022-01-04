@@ -11,7 +11,7 @@ class ShowStatus extends BaseController {
 
     @Override
     public void execute(CommandContext ctx) {
-        CommandResult result = new CommandResult(true, PlayerStateManager.getParentPlayerPlace(Bukkit.getPlayer("POne0301")).toString());
+        CommandResult result = new CommandResult(true, PlayerStateManager.getParentPlayerPlace(Bukkit.getPlayer("POne0301_1")).toString());
         result.sendResult(ctx);
     }
 

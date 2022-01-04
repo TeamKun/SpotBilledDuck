@@ -8,7 +8,7 @@ public class RemoveParent extends CommandBase {
     public RemoveParent(CommandEnum commandEnum) {
         super(commandEnum);
         usage(usageBuilder -> {
-            usageBuilder.entityArgument("player", false, false);
+            usageBuilder.entityArgument("player", true, false);
         });
     }
 

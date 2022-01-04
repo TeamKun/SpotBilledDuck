@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -127,13 +128,18 @@ public class PlayerStateManager {
             parentPlayers.addAll(PlayerStateManager.parentPlayers.keySet());
         } else {
             // プレイヤーの所属するチームメンバーを取得
-            for (String targetPlayer : TeamManager.getTeamPlayers(player)) {
+            System.out.println(TeamManager.getTeamPlayers(player));
+            for (String targetPlayerName : TeamManager.getTeamPlayers(player)) {
+                Player targetPlayer = Bukkit.getPlayer(targetPlayerName);
+                if (targetPlayer == null) continue;
+
                 // 親がいるかチェック
-                UUID targetPlayerId = Bukkit.getPlayer(targetPlayer).getUniqueId();
-                if (parentPlayers.contains(targetPlayerId)) {
+                UUID targetPlayerId = targetPlayer.getUniqueId();
+                if (PlayerStateManager.parentPlayers.containsKey(targetPlayerId)) {
                     parentPlayers.add(targetPlayerId);
                 }
             }
+            System.out.println(player.getName() + " " + parentPlayers);
         }
         return parentPlayers;
     }

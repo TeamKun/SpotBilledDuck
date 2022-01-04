@@ -14,13 +14,15 @@ public class TeamManager {
     // TODO: 不要になったら消す
     private static ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     private static Scoreboard board = scoreboardManager.getMainScoreboard();
-    private static List<Team> teams = new ArrayList<>();
 
     public static Set<String> getTeamPlayers(Player player) {
-        Set<String> teamPlayers = null;
         // 存在するチームは本プラグインに関係するものという前提、それ以外のチームは考慮しない
-        for (Team team : player.getScoreboard().getTeams()) {
-            teamPlayers = team.getEntries();
+        // Team team = board.getTeams() .getEntryTeam(player.getName());
+        Set<String> teamPlayers = null;
+        for (Team team: board.getTeams()) {
+            if (team.getEntries().contains(player.getName())) {
+                teamPlayers = team.getEntries();
+            }
         }
         return teamPlayers;
     }
