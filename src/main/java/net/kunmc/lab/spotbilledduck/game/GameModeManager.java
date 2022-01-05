@@ -27,7 +27,7 @@ public class GameModeManager {
         toggleState();
         ParticleManager.stopShowParticle();
         PlayerMoveCalculator.stopAdjustPosition();
-        PlayerStateManager.stopRemoveParentPlayerReachedPlace();
+        PlayerStateManager.clearPlayerState();
         return new CommandResult(true, "停止しました");
     }
 

@@ -46,9 +46,12 @@ public class PlayerStateManager {
         }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 10);
     }
 
-    public static void stopRemoveParentPlayerReachedPlace() {
+    public static void clearPlayerState() {
         removeParentPlayerReachedPlaceTask.cancel();
         removeParentPlayerReachedPlaceTask = null;
+        for (UUID id: parentPlayers.keySet()) {
+            parentPlayers.get(id).clear();
+        }
     }
 
     public static CommandResult addParentPlayer(UUID id) {
