@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,6 +20,7 @@ public class PlayerStateManager {
     // <親プレイヤーのID, 歩いた地点>
     @Getter
     private static Map<UUID, Set<String>> parentPlayers = new HashMap<>();
+    private static Map<UUID, Set<String>> childrenParents = new HashMap<>();
     private static BukkitTask removeParentPlayerReachedPlaceTask;
 
     public static void startRemoveParentPlayerReachedPlace() {
@@ -128,7 +128,6 @@ public class PlayerStateManager {
             parentPlayers.addAll(PlayerStateManager.parentPlayers.keySet());
         } else {
             // プレイヤーの所属するチームメンバーを取得
-            System.out.println(TeamManager.getTeamPlayers(player));
             for (String targetPlayerName : TeamManager.getTeamPlayers(player)) {
                 Player targetPlayer = Bukkit.getPlayer(targetPlayerName);
                 if (targetPlayer == null) continue;
@@ -139,7 +138,6 @@ public class PlayerStateManager {
                     parentPlayers.add(targetPlayerId);
                 }
             }
-            System.out.println(player.getName() + " " + parentPlayers);
         }
         return parentPlayers;
     }

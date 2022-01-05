@@ -6,7 +6,6 @@ import net.kunmc.lab.spotbilledduck.game.PlayerStateManager;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Locale;
 
 class AddParent extends BaseController {
 

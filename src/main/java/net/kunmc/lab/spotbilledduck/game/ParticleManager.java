@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedParticle;
 import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,10 +23,10 @@ public class ParticleManager {
                 // パーティクル表示
                 // playerの周囲5マスに表示する
                 PlayerStateManager.getChildPlayers().forEach(player -> {
-                    // 表示範囲（前後上下左右5マス）
-                    int rx = 5;
-                    int ry = 5;
-                    int rz = 5;
+                    // 表示範囲（前後上下左右4マス）
+                    int rx = 4;
+                    int ry = 4;
+                    int rz = 4;
                     double px = player.getLocation().getX();
                     double py = player.getLocation().getY();
                     double pz = player.getLocation().getZ();
@@ -37,8 +38,11 @@ public class ParticleManager {
                                 Location targetLocation = block.getLocation();
                                 // 1ブロック上に乗ることが可能か表示する
                                 targetLocation.add(0, 1, 0);
+                                // particleを表示できないなら飛ばす
+                                if (!canShowParticleBlock(targetLocation.getBlock())) continue;
                                 String targetPlace = Place.getXyzPlaceStringFromLocation(targetLocation);
-                                if (!PlayerStateManager.isParentReachedPlace(player, targetPlace) || !PlayerStateManager.canStand(block))
+                                // particleを表示する必要がなければ飛ばす
+                                if (!PlayerStateManager.canStand(block) || !PlayerStateManager.isParentReachedPlace(player, targetPlace))
                                     continue;
 
                                 targetLocation.add(0.5, 0.5, 0.5);
@@ -59,11 +63,25 @@ public class ParticleManager {
                     }
                 });
             }
-        }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 3);
+        }.runTaskTimer(SpotBilledDuck.getPlugin(), 0, 5);
     }
 
     public static void stopShowParticle() {
         showParticleTack.cancel();
         showParticleTack = null;
+    }
+
+    public static boolean canShowParticleBlock(Block block) {
+        // 対象のブロックが強制移動の対象になるかを判定
+        Material type = block.getType();
+        return type.equals(Material.AIR) ||
+                type.equals(Material.CAVE_AIR) ||
+                type.equals(Material.VOID_AIR) ||
+                type.equals(Material.GRASS) ||
+                type.equals(Material.TALL_GRASS) ||
+                type.equals(Material.WATER) ||
+                type.equals(Material.BUBBLE_COLUMN) ||
+                type.equals(Material.SEAGRASS) ||
+                type.equals(Material.TALL_SEAGRASS);
     }
 }
