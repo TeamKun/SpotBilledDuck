@@ -20,7 +20,7 @@ public class PlayerStateManager {
     // <親プレイヤーのID, 歩いた地点>
     @Getter
     private static Map<UUID, Set<String>> parentPlayers = new HashMap<>();
-    private static Map<UUID, Set<String>> childrenParents = new HashMap<>();
+
     private static BukkitTask removeParentPlayerReachedPlaceTask;
 
     public static void startRemoveParentPlayerReachedPlace() {
@@ -117,6 +117,14 @@ public class PlayerStateManager {
 
     public static boolean isParentPlayer(UUID id) {
         return parentPlayers.containsKey(id);
+    }
+
+    public static Set<String> getPlayersName() {
+        Set<String> names = new HashSet<>();
+        for (UUID id : parentPlayers.keySet()) {
+            names.add(Bukkit.getPlayer(id).getName());
+        }
+        return names;
     }
 
     public static Set<UUID> getParentPlayersId(Player player) {

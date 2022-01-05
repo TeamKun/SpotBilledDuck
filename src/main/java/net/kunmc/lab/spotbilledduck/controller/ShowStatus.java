@@ -3,7 +3,6 @@ package net.kunmc.lab.spotbilledduck.controller;
 import dev.kotx.flylib.command.CommandContext;
 import net.kunmc.lab.spotbilledduck.command.CommandEnum;
 import net.kunmc.lab.spotbilledduck.game.PlayerStateManager;
-import org.bukkit.Bukkit;
 
 class ShowStatus extends BaseController {
 
@@ -11,7 +10,7 @@ class ShowStatus extends BaseController {
 
     @Override
     public void execute(CommandContext ctx) {
-        CommandResult result = new CommandResult(true, PlayerStateManager.getParentPlayerPlace(Bukkit.getPlayer("POne0301_1")).toString());
+        CommandResult result = new CommandResult(true, "親プレイヤー: " + PlayerStateManager.getPlayersName());
         result.sendResult(ctx);
     }
 

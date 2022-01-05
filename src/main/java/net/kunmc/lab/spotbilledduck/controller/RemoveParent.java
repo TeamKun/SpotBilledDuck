@@ -14,12 +14,19 @@ class RemoveParent extends BaseController {
     @Override
     public void execute(CommandContext ctx) {
         try {
+            boolean removed = false;
             for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
                 if (arg instanceof Player) {
-                    CommandResult result = PlayerStateManager.addParentPlayer(((Player) arg).getUniqueId());
+                    CommandResult result = PlayerStateManager.removeParentPlayer(((Player) arg).getUniqueId());
+                    removed = true;
                     result.sendResult(ctx);
                 }
             }
+            if (!removed) {
+                CommandResult result = new CommandResult(false, "プレイヤーが削除されませんでした。プレイヤー名が正しいか確認してください。");
+                result.sendResult(ctx);
+            }
+
         } catch (IndexOutOfBoundsException e) {
             ctx.fail("引数が不正です");
         }

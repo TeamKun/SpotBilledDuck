@@ -14,11 +14,17 @@ class AddParent extends BaseController {
     @Override
     public void execute(CommandContext ctx) {
         try {
+            boolean added = false;
             for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
                 if (arg instanceof Player) {
                     CommandResult result = PlayerStateManager.addParentPlayer(((Player) arg).getUniqueId());
+                    added = true;
                     result.sendResult(ctx);
                 }
+            }
+            if (!added) {
+                CommandResult result = new CommandResult(false, "プレイヤーが追加されませんでした。プレイヤー名が正しいか確認してください。");
+                result.sendResult(ctx);
             }
         } catch (IndexOutOfBoundsException e) {
             ctx.fail("引数が不正です");
