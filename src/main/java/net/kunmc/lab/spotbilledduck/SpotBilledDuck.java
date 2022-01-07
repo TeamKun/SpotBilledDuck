@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import dev.kotx.flylib.FlyLib;
 import lombok.Getter;
 import net.kunmc.lab.spotbilledduck.command.Main;
-import net.kunmc.lab.spotbilledduck.game.PlayerEventHandler;
+import net.kunmc.lab.spotbilledduck.game.PlayerEventListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SpotBilledDuck extends JavaPlugin {
@@ -22,7 +22,7 @@ public final class SpotBilledDuck extends JavaPlugin {
         FlyLib.create(this, builder -> {
             builder.command(new Main());
         });
-        getServer().getPluginManager().registerEvents(new PlayerEventHandler(), this);
+        getServer().getPluginManager().registerEvents(new PlayerEventListener(), this);
     }
 
     @Override

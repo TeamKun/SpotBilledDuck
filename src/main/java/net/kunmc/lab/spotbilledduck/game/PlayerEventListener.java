@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static net.kunmc.lab.spotbilledduck.game.PlayerStateManager.removeParentPlayerReachedPlace;
 
-public class PlayerEventHandler implements Listener {
+public class PlayerEventListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         // 親プレイやーの移動した場所を把握する
