@@ -1,15 +1,15 @@
 package net.kunmc.lab.spotbilledduck.game;
 
 import lombok.Getter;
-import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import net.kunmc.lab.spotbilledduck.controller.CommandResult;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PlayerStateManager {

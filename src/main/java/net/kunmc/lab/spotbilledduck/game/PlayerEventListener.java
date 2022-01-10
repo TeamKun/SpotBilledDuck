@@ -18,7 +18,7 @@ public class PlayerEventListener implements Listener {
             return;
 
         if (PlayerStateManager.isParentPlayer(player.getName())) {
-            Block block = player.getLocation().add(0,-1,0).getBlock();
+            Block block = player.getLocation().add(0, -1, 0).getBlock();
             block.setMetadata(GameModeManager.getStartTime() + GameConst.REACH, new FixedMetadataValue(SpotBilledDuck.getPlugin(), true));
 
             if (!GameModeManager.isSoloMode()) {

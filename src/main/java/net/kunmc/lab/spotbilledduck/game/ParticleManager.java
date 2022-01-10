@@ -5,10 +5,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedParticle;
 import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -42,15 +40,12 @@ public class ParticleManager {
                                 targetLocation.add(0, 1, 0);
 
                                 // particleを表示しないケース
-                                //if (!canShowParticleBlock(targetLocation.getBlock()) ||
-                                //        !TeleportPlayer.isReachedBlock(player, block) ||
-                                //        !PlayerStateManager.canStand(block)) continue;
                                 if (!TeleportPlayer.isReachedBlock(player, block) ||
                                         !PlayerStateManager.canStand(block)) continue;
 
 
                                 showParticleTack(targetLocation, player);
-                           }
+                            }
                         }
                     }
                 });

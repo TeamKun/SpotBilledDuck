@@ -18,12 +18,13 @@ public class TeamManager {
         for (Team team : board.getTeams()) {
             if (team.getEntries().contains(player.getName())) {
                 teamPlayers = team.getEntries();
+                break;
             }
         }
         return teamPlayers;
     }
 
-    public static String getTeamName(Player player){
+    public static String getTeamName(Player player) {
         // 存在するチームは本プラグインに関係するものという前提、それ以外のチームは考慮しない
         for (Team team : board.getTeams()) {
             if (team.getEntries().contains(player.getName())) {
