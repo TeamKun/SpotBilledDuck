@@ -22,4 +22,14 @@ public class TeamManager {
         }
         return teamPlayers;
     }
+
+    public static String getTeamName(Player player){
+        // 存在するチームは本プラグインに関係するものという前提、それ以外のチームは考慮しない
+        for (Team team : board.getTeams()) {
+            if (team.getEntries().contains(player.getName())) {
+                return team.getName();
+            }
+        }
+        return null;
+    }
 }

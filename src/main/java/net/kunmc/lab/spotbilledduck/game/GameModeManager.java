@@ -9,14 +9,17 @@ public class GameModeManager {
     @Getter
     private static boolean isRunning;
 
+    // リセットが難しいメタデータに持たせる値、start時間をメタデータに持たせることで疑似的にリセット可能にする
+    @Getter
+    private static String startTime;
+
     public static CommandResult start() {
         if (isRunning) {
             return new CommandResult(false, "既に開始されています");
         }
         toggleState();
+        startTime = Integer.toString((int) (System.currentTimeMillis() / 1000L));
         ParticleManager.startShowParticle();
-        PlayerMoveCalculator.startAdjustPosition();
-        PlayerStateManager.startRemoveParentPlayerReachedPlace();
         return new CommandResult(true, "開始しました");
     }
 
@@ -26,8 +29,6 @@ public class GameModeManager {
         }
         toggleState();
         ParticleManager.stopShowParticle();
-        PlayerMoveCalculator.stopAdjustPosition();
-        PlayerStateManager.clearPlayerState();
         return new CommandResult(true, "停止しました");
     }
 

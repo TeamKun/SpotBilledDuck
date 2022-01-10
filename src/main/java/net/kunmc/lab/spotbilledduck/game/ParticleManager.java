@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Door;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -38,27 +40,17 @@ public class ParticleManager {
                                 Location targetLocation = block.getLocation();
                                 // 1ブロック上に乗ることが可能か表示する
                                 targetLocation.add(0, 1, 0);
-                                // particleを表示できないなら飛ばす
-                                if (!canShowParticleBlock(targetLocation.getBlock())) continue;
-                                String targetPlace = Place.getXyzPlaceStringFromLocation(targetLocation);
-                                // particleを表示する必要がなければ飛ばす
-                                if (!PlayerStateManager.canStand(block) || !PlayerStateManager.isParentReachedPlace(player, targetPlace))
-                                    continue;
 
-                                targetLocation.add(0.5, 0.5, 0.5);
-                                PacketContainer packetContainer = SpotBilledDuck.getProtocolManager().createPacket(
-                                        PacketType.Play.Server.WORLD_PARTICLES);
-                                packetContainer.getDoubles()
-                                        .write(0, targetLocation.getX())
-                                        .write(1, targetLocation.getY())
-                                        .write(2, targetLocation.getZ());
-                                packetContainer.getNewParticles().write(0, WrappedParticle.create(Particle.COMPOSTER, null));
-                                try {
-                                    SpotBilledDuck.getProtocolManager().sendServerPacket(player, packetContainer);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                                // particleを表示しないケース
+                                //if (!canShowParticleBlock(targetLocation.getBlock()) ||
+                                //        !TeleportPlayer.isReachedBlock(player, block) ||
+                                //        !PlayerStateManager.canStand(block)) continue;
+                                if (!TeleportPlayer.isReachedBlock(player, block) ||
+                                        !PlayerStateManager.canStand(block)) continue;
+
+
+                                showParticleTack(targetLocation, player);
+                           }
                         }
                     }
                 });
@@ -71,17 +63,18 @@ public class ParticleManager {
         showParticleTack = null;
     }
 
-    public static boolean canShowParticleBlock(Block block) {
-        // 対象のブロックが強制移動の対象になるかを判定
-        Material type = block.getType();
-        return type.equals(Material.AIR) ||
-                type.equals(Material.CAVE_AIR) ||
-                type.equals(Material.VOID_AIR) ||
-                type.equals(Material.GRASS) ||
-                type.equals(Material.TALL_GRASS) ||
-                type.equals(Material.WATER) ||
-                type.equals(Material.BUBBLE_COLUMN) ||
-                type.equals(Material.SEAGRASS) ||
-                type.equals(Material.TALL_SEAGRASS);
+    public static void showParticleTack(Location location, Player player) {
+        location.add(0.5, 0.8, 0.5);
+        PacketContainer packetContainer = SpotBilledDuck.getProtocolManager().createPacket(PacketType.Play.Server.WORLD_PARTICLES);
+        packetContainer.getDoubles()
+                .write(0, location.getX())
+                .write(1, location.getY())
+                .write(2, location.getZ());
+        packetContainer.getNewParticles().write(0, WrappedParticle.create(Particle.COMPOSTER, null));
+        try {
+            SpotBilledDuck.getProtocolManager().sendServerPacket(player, packetContainer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

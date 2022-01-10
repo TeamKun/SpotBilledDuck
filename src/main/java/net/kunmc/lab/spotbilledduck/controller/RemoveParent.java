@@ -17,7 +17,7 @@ class RemoveParent extends BaseController {
             boolean removed = false;
             for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
                 if (arg instanceof Player) {
-                    CommandResult result = PlayerStateManager.removeParentPlayer(((Player) arg).getUniqueId());
+                    CommandResult result = PlayerStateManager.removeParentPlayer(((Player) arg).getName());
                     removed = true;
                     result.sendResult(ctx);
                 }

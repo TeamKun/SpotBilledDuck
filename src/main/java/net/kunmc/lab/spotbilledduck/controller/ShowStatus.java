@@ -10,7 +10,7 @@ class ShowStatus extends BaseController {
 
     @Override
     public void execute(CommandContext ctx) {
-        CommandResult result = new CommandResult(true, "親プレイヤー: " + PlayerStateManager.getPlayersName());
+        CommandResult result = new CommandResult(true, "親プレイヤー: " + PlayerStateManager.getParentPlayers());
         result.sendResult(ctx);
     }
 

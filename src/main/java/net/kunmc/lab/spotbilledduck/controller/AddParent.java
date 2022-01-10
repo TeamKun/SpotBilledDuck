@@ -17,7 +17,7 @@ class AddParent extends BaseController {
             boolean added = false;
             for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
                 if (arg instanceof Player) {
-                    CommandResult result = PlayerStateManager.addParentPlayer(((Player) arg).getUniqueId());
+                    CommandResult result = PlayerStateManager.addParentPlayer(((Player) arg).getName());
                     added = true;
                     result.sendResult(ctx);
                 }
