@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedParticle;
 import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -19,10 +20,9 @@ public class ParticleManager {
             @Override
             public void run() {
                 if (!GameModeManager.isRunning()) return;
-
                 // パーティクル表示
                 // playerの周囲5マスに表示する
-                PlayerStateManager.getChildPlayers().forEach(player -> {
+                Bukkit.getOnlinePlayers().forEach(player -> {
                     // 表示範囲（前後上下左右4マス）
                     int rx = 4;
                     int ry = 4;
@@ -42,8 +42,6 @@ public class ParticleManager {
                                 // particleを表示しないケース
                                 if (!TeleportPlayer.isReachedBlock(player, block) ||
                                         !PlayerStateManager.canStand(block)) continue;
-
-
                                 showParticleTack(targetLocation, player);
                             }
                         }

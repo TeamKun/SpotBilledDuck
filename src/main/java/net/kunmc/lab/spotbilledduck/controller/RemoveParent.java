@@ -15,18 +15,20 @@ class RemoveParent extends BaseController {
     public void execute(CommandContext ctx) {
         try {
             boolean removed = false;
+            int cnt = 0;
             for (Object arg : ((List) ctx.getTypedArgs().get(0))) {
-                if (arg instanceof Player) {
-                    CommandResult result = PlayerStateManager.removeParentPlayer(((Player) arg).getName());
+                if (arg instanceof Player && PlayerStateManager.removeParentPlayer(((Player) arg).getName())) {
                     removed = true;
-                    result.sendResult(ctx);
+                    cnt++;
                 }
             }
+            CommandResult result;
             if (!removed) {
-                CommandResult result = new CommandResult(false, "プレイヤーが削除されませんでした。プレイヤー名が正しいか確認してください。");
-                result.sendResult(ctx);
+                result = new CommandResult(false, "プレイヤーが削除されませんでした。プレイヤー名が正しいか、親に登録されているか確認してください。");
+            } else {
+                result = new CommandResult(true, cnt + "名のプレイヤーを削除しました。");
             }
-
+            result.sendResult(ctx);
         } catch (IndexOutOfBoundsException e) {
             ctx.fail("引数が不正です");
         }

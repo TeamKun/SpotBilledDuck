@@ -3,6 +3,7 @@ package net.kunmc.lab.spotbilledduck.game;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,14 +34,22 @@ public class TeleportPlayer {
         if (PlayerStateManager.isParentPlayer(player.getName())) return;
 
         Block checkBlock = player.getLocation().add(0, -1, 0).getBlock();
-        if (isReachedBlock(player, checkBlock)) return;
+        if (isReachedBlock(player, checkBlock)) {
+            PlayerStateManager.addChildPlayerPlace(player, checkBlock);
+            return;
+        }
 
         Location location = getTeleportLocation(player);
         if (location == null) return;
 
         location.setPitch(player.getLocation().getPitch());
         location.setYaw(player.getLocation().getYaw());
-        player.teleport(location);
+
+        player.teleport(location.add(0.5,0,0.5));
+        Block underBlock = player.getLocation().add(0,-1,0).getBlock();
+        if (underBlock.getType().equals(Material.AIR) || underBlock.getType().equals(Material.VOID_AIR) || underBlock.getType().equals(Material.CAVE_AIR)) {
+            underBlock.setType(Material.GRASS_BLOCK);
+        }
     }
 
     public static boolean isReachedBlock(Player player, Block block) {
@@ -62,35 +71,20 @@ public class TeleportPlayer {
     }
 
     private static Location getTeleportLocation(Player player) {
-        Set<String> toPlayers;
-        if (GameModeManager.isSoloMode()) {
-            toPlayers = PlayerStateManager.getParentPlayers();
+        if (PlayerStateManager.getChildPlayerPlace().containsKey(player.getName())) {
+            return Place.getLocateFromPlaceString(PlayerStateManager.getChildPlayerPlace().get(player.getName())).add(0,1,0);
         } else {
-            toPlayers = TeamManager.getTeamPlayers(player).stream().filter(e -> PlayerStateManager.isParentPlayer(e)).collect(Collectors.toSet());
-        }
-        String destPlayerName = getRandomStringFromSet(toPlayers);
-        if (destPlayerName == null) return null;
-        Player parentPlayer = Bukkit.getPlayer(destPlayerName);
-        // 選ばれたプレイヤーの+-3マスの最初にヒットしたところに飛ばす
-        int rx = 4;
-        int ry = 4;
-        int rz = 4;
-        double px = parentPlayer.getLocation().getX();
-        double py = parentPlayer.getLocation().getY();
-        double pz = parentPlayer.getLocation().getZ();
-        for (int x = rx * -1; x < rx; x++) {
-            for (int y = ry * -1; y < ry; y++) {
-                for (int z = rz * -1; z < rz; z++) {
-                    Block block = new Location(parentPlayer.getWorld(), px + x, py + y, pz + z).getBlock();
-                    if (block == null) continue;
-                    if (isReachedBlock(player, block) && rand.nextDouble() < 0.5) {
-                        // 返すときはメタデータを持つブロックの上に返す
-                        return block.getLocation().add(0.5, 1, 0.5);
-                    }
-                }
+            Set<String> toPlayers;
+            if (GameModeManager.isSoloMode()) {
+                toPlayers = PlayerStateManager.getParentPlayers();
+            } else {
+                toPlayers = TeamManager.getTeamPlayers(player).stream().filter(e -> PlayerStateManager.isParentPlayer(e)).collect(Collectors.toSet());
             }
+            String destPlayerName = getRandomStringFromSet(toPlayers);
+            if (destPlayerName == null) return null;
+            Player parentPlayer = Bukkit.getPlayer(destPlayerName);
+            return parentPlayer.getLocation().getBlock().getLocation();
         }
-        return parentPlayer.getLocation();
     }
 
     private static String getRandomStringFromSet(Set<String> set) {

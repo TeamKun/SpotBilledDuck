@@ -13,7 +13,6 @@ public class PlayerEventListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent e) {
         // 親プレイやーの移動した場所を把握する
         Player player = e.getPlayer();
-
         if (!GameModeManager.isRunning() || !TeleportPlayer.shouldTeleportPlayer(player))
             return;
 
@@ -27,8 +26,9 @@ public class PlayerEventListener implements Listener {
                         new FixedMetadataValue(SpotBilledDuck.getPlugin(), true));
             }
         } else {
-            if (TeleportPlayer.shouldTeleportPlayer(player))
+            if (TeleportPlayer.shouldTeleportPlayer(player)) {
                 TeleportPlayer.teleportPlayer(player);
+            }
         }
     }
 }
