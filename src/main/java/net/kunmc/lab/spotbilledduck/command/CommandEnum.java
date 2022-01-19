@@ -1,7 +1,7 @@
 package net.kunmc.lab.spotbilledduck.command;
 
 public enum CommandEnum {
-    spotBilledDuck(),
+    spotbilledduck(),
     mode(),
     start(),
     stop(),

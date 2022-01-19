@@ -3,7 +3,7 @@ package net.kunmc.lab.spotbilledduck.command;
 public class Main extends CommandBase {
 
     public Main() {
-        super(CommandEnum.spotBilledDuck);
+        super(CommandEnum.spotbilledduck);
         children(
                 new Mode(CommandEnum.mode),
                 new Start(CommandEnum.start),
