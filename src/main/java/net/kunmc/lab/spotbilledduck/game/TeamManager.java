@@ -24,6 +24,18 @@ public class TeamManager {
         return teamPlayers;
     }
 
+    public static boolean containsParentPlayersAtAllTeam() {
+        for (Team team : board.getTeams()) {
+            boolean valid = false;
+            if (team.getEntries().size() == 0) return false;
+            for (String playerName: team.getEntries()){
+                if (PlayerStateManager.getParentPlayers().contains(playerName)) valid = true;
+            }
+            if (!valid) return false;
+        }
+        return true;
+    }
+
     public static String getTeamName(Player player) {
         // 存在するチームは本プラグインに関係するものという前提、それ以外のチームは考慮しない
         for (Team team : board.getTeams()) {

@@ -2,6 +2,7 @@ package net.kunmc.lab.spotbilledduck.game;
 
 import lombok.Getter;
 import net.kunmc.lab.spotbilledduck.controller.CommandResult;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FilenameUtils;
 
 public class GameModeManager {
     private static GameMode currentMode = GameMode.SOLO;
@@ -17,6 +18,15 @@ public class GameModeManager {
         if (isRunning) {
             return new CommandResult(false, "既に開始されています");
         }
+        boolean parentValid;
+        if (GameModeManager.isSoloMode()) {
+            parentValid = PlayerStateManager.getParentPlayers().size() > 0;
+        } else {
+            parentValid = TeamManager.containsParentPlayersAtAllTeam();
+        }
+        if (!parentValid) {
+            return new CommandResult(false, "親プレイヤーが存在しません（チームモードの場合は全チームに親プレイヤーがいる必要があります）");
+        }
         toggleState();
         startTime = Integer.toString((int) (System.currentTimeMillis() / 1000L));
         ParticleManager.startShowParticle();
@@ -29,6 +39,7 @@ public class GameModeManager {
         }
         toggleState();
         ParticleManager.stopShowParticle();
+        PlayerStateManager.getChildPlayerPlace().clear();
         return new CommandResult(true, "停止しました");
     }
 
