@@ -3,8 +3,10 @@ package net.kunmc.lab.spotbilledduck.game;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedParticle;
+import lombok.Getter;
 import net.kunmc.lab.spotbilledduck.SpotBilledDuck;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -13,6 +15,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class ParticleManager {
+    @Getter
+    private static Color particleColor = Color.WHITE;
+
     private static BukkitTask showParticleTack;
 
     public static void startShowParticle() {
@@ -24,9 +29,9 @@ public class ParticleManager {
                 // playerの周囲5マスに表示する
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     // 表示範囲（前後上下左右4マス）
-                    int rx = 4;
-                    int ry = 4;
-                    int rz = 4;
+                    int rx = 5;
+                    int ry = 5;
+                    int rz = 5;
                     double px = player.getLocation().getX();
                     double py = player.getLocation().getY();
                     double pz = player.getLocation().getZ();
@@ -57,17 +62,44 @@ public class ParticleManager {
     }
 
     public static void showParticleTack(Location location, Player player) {
-        location.add(0.5, 0.8, 0.5);
         PacketContainer packetContainer = SpotBilledDuck.getProtocolManager().createPacket(PacketType.Play.Server.WORLD_PARTICLES);
         packetContainer.getDoubles()
-                .write(0, location.getX())
-                .write(1, location.getY())
-                .write(2, location.getZ());
-        packetContainer.getNewParticles().write(0, WrappedParticle.create(Particle.COMPOSTER, null));
+                .write(0, location.getX() + 0.5)
+                .write(1, location.getY() + 0.4)
+                .write(2, location.getZ() + 0.5);
+        packetContainer.getFloat().write(0, 1.0f);
+        packetContainer.getNewParticles().write(0, WrappedParticle.create(Particle.REDSTONE, new Particle.DustOptions(particleColor, 1)));
         try {
             SpotBilledDuck.getProtocolManager().sendServerPacket(player, packetContainer);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean setParticleColor(String color) {
+        boolean valid = true;
+        switch (color) {
+            case "white":
+                particleColor = Color.WHITE;
+                break;
+            case "black":
+                particleColor = Color.BLACK;
+                break;
+            case "red":
+                particleColor = Color.RED;
+                break;
+            case "blue":
+                particleColor = Color.BLUE;
+                break;
+            case "green":
+                particleColor = Color.GREEN;
+                break;
+            case "purple":
+                particleColor = Color.PURPLE;
+                break;
+            default:
+                valid = false;
+        }
+        return valid;
     }
 }

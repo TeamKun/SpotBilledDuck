@@ -28,7 +28,7 @@ public class TeamManager {
         for (Team team : board.getTeams()) {
             boolean valid = false;
             if (team.getEntries().size() == 0) return false;
-            for (String playerName: team.getEntries()){
+            for (String playerName : team.getEntries()) {
                 if (PlayerStateManager.getParentPlayers().contains(playerName)) valid = true;
             }
             if (!valid) return false;

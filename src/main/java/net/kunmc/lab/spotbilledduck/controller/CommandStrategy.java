@@ -19,6 +19,7 @@ public class CommandStrategy {
         this.controllers.add(new AddParent());
         this.controllers.add(new RemoveParent());
         this.controllers.add(new ShowStatus());
+        this.controllers.add(new SetParticleColor());
     }
 
     public void execute(CommandEnum commandEnum, CommandContext ctx) {

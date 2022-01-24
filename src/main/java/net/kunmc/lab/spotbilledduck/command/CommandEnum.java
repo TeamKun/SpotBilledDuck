@@ -7,7 +7,8 @@ public enum CommandEnum {
     stop(),
     showStatus(),
     addParent(),
-    removeParent();
+    removeParent(),
+    setParticleColor();
 
     public String commandName() {
         return this.name();

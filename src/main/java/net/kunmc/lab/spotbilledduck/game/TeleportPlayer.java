@@ -45,8 +45,8 @@ public class TeleportPlayer {
         location.setPitch(player.getLocation().getPitch());
         location.setYaw(player.getLocation().getYaw());
 
-        player.teleport(location.add(0.5,0,0.5));
-        Block underBlock = player.getLocation().add(0,-1,0).getBlock();
+        player.teleport(location.add(0.5, 0, 0.5));
+        Block underBlock = player.getLocation().add(0, -1, 0).getBlock();
         if (underBlock.getType().equals(Material.AIR) || underBlock.getType().equals(Material.VOID_AIR) || underBlock.getType().equals(Material.CAVE_AIR)) {
             underBlock.setType(Material.GRASS_BLOCK);
         }
@@ -72,7 +72,7 @@ public class TeleportPlayer {
 
     private static Location getTeleportLocation(Player player) {
         if (PlayerStateManager.getChildPlayerPlace().containsKey(player.getName())) {
-            return Place.getLocateFromPlaceString(PlayerStateManager.getChildPlayerPlace().get(player.getName())).add(0,1,0);
+            return Place.getLocateFromPlaceString(PlayerStateManager.getChildPlayerPlace().get(player.getName())).add(0, 1, 0);
         } else {
             Set<String> toPlayers;
             if (GameModeManager.isSoloMode()) {

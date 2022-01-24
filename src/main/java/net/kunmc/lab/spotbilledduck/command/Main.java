@@ -10,7 +10,8 @@ public class Main extends CommandBase {
                 new Stop(CommandEnum.stop),
                 new ShowStatus(CommandEnum.showStatus),
                 new AddParent(CommandEnum.addParent),
-                new RemoveParent(CommandEnum.removeParent)
+                new RemoveParent(CommandEnum.removeParent),
+                new SetParticleColor(CommandEnum.setParticleColor)
         );
     }
 }

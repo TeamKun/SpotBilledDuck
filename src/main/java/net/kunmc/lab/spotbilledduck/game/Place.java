@@ -2,7 +2,6 @@ package net.kunmc.lab.spotbilledduck.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 
 public class Place {
     private static StringBuilder sb = new StringBuilder();

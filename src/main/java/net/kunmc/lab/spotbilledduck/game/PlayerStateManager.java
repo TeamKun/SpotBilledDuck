@@ -1,16 +1,14 @@
 package net.kunmc.lab.spotbilledduck.game;
 
-import com.comphenix.protocol.PacketType;
 import lombok.Getter;
-import net.kunmc.lab.spotbilledduck.controller.CommandResult;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class PlayerStateManager {
     // <親プレイヤーのID, 歩いた地点>

@@ -2,7 +2,6 @@ package net.kunmc.lab.spotbilledduck.game;
 
 import lombok.Getter;
 import net.kunmc.lab.spotbilledduck.controller.CommandResult;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FilenameUtils;
 
 public class GameModeManager {
     private static GameMode currentMode = GameMode.SOLO;
