@@ -30,7 +30,7 @@ public class ParticleManager {
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     // 表示範囲（前後上下左右4マス）
                     int rx = 5;
-                    int ry = 5;
+                    int ry = 4;
                     int rz = 5;
                     double px = player.getLocation().getX();
                     double py = player.getLocation().getY();

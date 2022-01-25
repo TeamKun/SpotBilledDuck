@@ -50,6 +50,7 @@ public class GameModeManager {
         }
 
         currentMode = mode;
+        PlayerStateManager.getChildPlayerPlace().clear();
         return new CommandResult(true, mode.name().toLowerCase() + "モードに切り替えました");
     }
 
